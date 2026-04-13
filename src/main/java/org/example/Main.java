@@ -24,6 +24,8 @@ public class Main {
                 6 Cadastrar Equipamento
                 7 Buscar equipamento por id
                 8 Buscar equipamento por id do fornecedor
+                9 Atualizar equipamento
+                10 Deletar equipamento
                 """);
     }
 
@@ -66,6 +68,10 @@ public class Main {
             }
             case 9: {
                 atualizarEquipamento();
+                break;
+            }
+            case 10: {
+                deletarEquipamento();
                 break;
             }
         }
@@ -256,6 +262,31 @@ public class Main {
     }
 
     public static void atualizarEquipamento(){
+        var dao = new SistemaDAO();
+        System.out.println("Insira o id do equipamento que deseja atualizar: ");
+        int id = SC.nextInt();
+        try{
+            Equipamento equipamento = dao.buscarEquipamentoID(id);
+            System.out.println("Insira o novo id do fornecedor: ");
+            int fornecedor_id = SC.nextInt();
+            equipamento.setFornecedor_id(fornecedor_id);
+            dao.atualizarEquipamento(equipamento);
+        }catch(SQLException e){
+            System.out.println("Erro ao acessar o banco de dados");
+            e.printStackTrace();
+        }
+    }
 
+    public static void deletarEquipamento(){
+        var dao = new SistemaDAO();
+        System.out.println("Insira o id do equipamento que deseja deletar: ");
+        int id = SC.nextInt();
+        try{
+            Equipamento equipamento = dao.buscarEquipamentoID(id);
+            dao.deletarEquipamento(equipamento);
+        }catch(SQLException e){
+            System.out.println("Erro ao acessar o banco de dados!");
+            e.printStackTrace();
+        }
     }
 }

@@ -124,6 +124,7 @@ public class SistemaDAO {
 
                 return new Equipamento(id, nome, numero_serie, fornecedor_id);
             }else {
+                System.out.println("Id do equipamento não encontrado!");
                 throw new RuntimeException("Id do equipamento não encontrado!");
             }
         }
@@ -155,15 +156,25 @@ public class SistemaDAO {
     public void atualizarEquipamento(Equipamento equipamento) throws SQLException{
         String command = """
                 UPDATE Equipamento
-                SET nome = ?, numero_serie = ?, fornecedor_id = ?
+                SET fornecedor_id = ?
                 WHERE id = ?;
                 """;
         try(Connection conn = Conexao.conectar();
             PreparedStatement stmt = conn.prepareStatement(command)){
-            stmt.setString(1, equipamento.getNome());
-            stmt.setString(2, equipamento.getNumero_serie());
-            stmt.setInt(3, equipamento.getFornecedor_id());
-            stmt.setInt(4, equipamento.getId());
+            stmt.setInt(1, equipamento.getFornecedor_id());
+            stmt.setInt(2, equipamento.getId());
+            stmt.executeUpdate();
+        }
+    }
+
+    public void deletarEquipamento(Equipamento equipamento) throws SQLException{
+        String command = """
+                DELETE FROM Equipamento
+                WHERE id = ?;
+                """;
+        try(Connection conn = Conexao.conectar();
+            PreparedStatement stmt = conn.prepareStatement(command)){
+            stmt.setInt(1, equipamento.getId());
             stmt.executeUpdate();
         }
     }
